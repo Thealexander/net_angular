@@ -30,6 +30,7 @@ builder.Services.Configure<MongoSettings>(options =>
 builder.Services.AddSingleton<MongoSettings>();
 builder.Services.AddTransient<IAutorContext, AutorContext>();
 builder.Services.AddTransient<IAutorRepository, AutorRepository>();
+builder.Services.AddScoped(typeof(IMongoRepository<>), typeof(MongoRepository<>));
 
 // Configurar políticas CORS
 var mCors = "CorsRules";

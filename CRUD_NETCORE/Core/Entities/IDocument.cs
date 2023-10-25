@@ -6,9 +6,9 @@ namespace microservicios.Core.Entities
     public interface IDocument
     {
         [BsonId]
-        [BsonRepresentation(BsonType.String)]
+        [BsonRepresentation(BsonType.ObjectId)]
 
-        ObjectId Id { get; set; }
+        string Id { get; set; }
 
         DateTime CreatedDate { get; }
     }
