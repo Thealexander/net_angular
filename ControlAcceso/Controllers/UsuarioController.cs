@@ -23,5 +23,17 @@ namespace ControlAcceso.Controllers
             return await _mediator.Send(parametros);
         }
 
+        [HttpPost("login")]
+        public async Task<ActionResult<UsuarioDTO>> Login(Login.UsuarioLoginCommand parametros)
+        {
+            return await _mediator.Send(parametros);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<UsuarioDTO>> Get()
+        {
+            return await _mediator.Send(new ActualUser.UsuarioActualCommnad());
+        }
+
     }
 }

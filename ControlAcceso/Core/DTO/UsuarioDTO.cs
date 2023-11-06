@@ -16,6 +16,8 @@ namespace ControlAcceso.Core.DTO
         public string Apellido { get; set;}
         public string Direccion { get; set; }
 
+        public string Token { get; set;}
+
     }
     
 }

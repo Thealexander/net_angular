@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using ControlAcceso.Core.DTO;
 using ControlAcceso.Core.Entities;
+using ControlAcceso.Core.JwtLogic;
 using ControlAcceso.Core.Persistence;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +27,19 @@ namespace ControlAcceso.Core.Application
 
         public string Direccion { get; set; }
         }
-        public 
+        public class UsuarioRegisterValidation : AbstractValidator<UsuarioRegisterCommand> { 
+        public UsuarioRegisterValidation()
+            {
+                RuleFor(x => x.Nombre).NotEmpty();
+                RuleFor(x => x.Apellido).NotEmpty();
+                RuleFor(x => x.Username).NotEmpty();
+                RuleFor(x => x.Password).NotEmpty();
+                RuleFor(x => x.Email).NotEmpty();
+                RuleFor(x => x.Direccion).NotEmpty();
+
+            }
+        
+        }
 
 
         public class UsuarioRegisterHandler : IRequestHandler<UsuarioRegisterCommand, UsuarioDTO>
@@ -33,12 +47,15 @@ namespace ControlAcceso.Core.Application
             private readonly SeguridadContexto _context;
             private readonly UserManager<Usuario> _usrManager;
             private readonly IMapper _mapper;
+            private readonly IJwtGenerator _jwtGenerator;
 
-            public UsuarioRegisterHandler(SeguridadContexto context, UserManager<Usuario> usrManager, IMapper mapper)
+            public UsuarioRegisterHandler(SeguridadContexto context, UserManager<Usuario> usrManager, IMapper mapper,
+                IJwtGenerator jwtGenerator)
             {
                 _context = context;
                 _usrManager = usrManager;
                 _mapper = mapper;
+                _jwtGenerator = jwtGenerator;
             }
 
             public async Task<UsuarioDTO> Handle(UsuarioRegisterCommand request, CancellationToken cancellationToken)
@@ -67,6 +84,7 @@ namespace ControlAcceso.Core.Application
                 if (resultado.Succeeded)
                 {
                     var usuarioDTO = _mapper.Map<Usuario, UsuarioDTO>(usuario);
+                    usuarioDTO.Token = _jwtGenerator.CreateToken(usuario);
                     return usuarioDTO;
                 }
                 throw new Exception("Error al intentar grabaar Nuevo Usuario");

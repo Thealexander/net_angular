@@ -12,6 +12,10 @@ using MediatR;
 using Microsoft.Extensions.Logging; // Agregar esta directiva
 using System.Reflection;
 using FluentValidation.AspNetCore;
+using ControlAcceso.Core.JwtLogic;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +42,27 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.Get
 //AutoMapper
 builder.Services.AddAutoMapper(typeof(Register.UsuarioRegisterHandler));
 
+//JwtGenerator
+builder.Services.AddScoped<IJwtGenerator, JwtGenerator>();
+builder.Services.AddScoped<IUsuarioSesion, UsuarioSesion>();
+
+//modelo de tokens para autenticar
+var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("6aB8wU7hbzjHcxv17bdhcG8uZTq0hjJI"));
+
+// Configuración de autenticación JWT
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
+{
+    opt.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = key,
+        ValidateAudience = false,
+        ValidateIssuer = false
+    };
+});
+
+
+//CORS
 var mCors = "CorsRules";
 builder.Services.AddCors(opt =>
 {
@@ -48,8 +73,8 @@ builder.Services.AddCors(opt =>
     });
 });
 
-builder.Services.AddControllers().AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<Register>());
-
+builder.Services.AddControllers()   //.AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<Register>());
+    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Register>());
 // Aprende más sobre la configuración de Swagger/OpenAPI en https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
