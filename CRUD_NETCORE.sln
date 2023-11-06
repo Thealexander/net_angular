@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "microservicios", "CRUD_NETCORE\microservicios.csproj", "{7382BF12-A6B1-4EAF-B228-47B20221377D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Libreria", "CRUD_NETCORE\Libreria.csproj", "{7382BF12-A6B1-4EAF-B228-47B20221377D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlAcceso", "ControlAcceso\ControlAcceso.csproj", "{EF5443B9-F9BA-4BA7-B9B8-9580F5682266}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{7382BF12-A6B1-4EAF-B228-47B20221377D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7382BF12-A6B1-4EAF-B228-47B20221377D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7382BF12-A6B1-4EAF-B228-47B20221377D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF5443B9-F9BA-4BA7-B9B8-9580F5682266}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF5443B9-F9BA-4BA7-B9B8-9580F5682266}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF5443B9-F9BA-4BA7-B9B8-9580F5682266}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF5443B9-F9BA-4BA7-B9B8-9580F5682266}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -28,7 +28,7 @@ namespace microservicios.Controllers
         }
 
         [HttpPost]
-        public async Task Post(AutorEntity autor)
+        public async Task Post([FromBody] AutorEntity autor)
         {
             await _autorGenericoRepository.InsertDocument(autor);
         }

@@ -36,7 +36,9 @@ namespace microservicios.Repository
 
         public async Task InsertDocument(TDocument document)
         {
+            //document.Id = ObjectId.GenerateNewId().ToString();
             await _collection.InsertOneAsync(document);
+           // return CreatedAtAction(nameof(Get), new { id = document.Id }, document);
         }
 
         public async Task UpdateDocument(TDocument document)
@@ -104,22 +106,31 @@ namespace microservicios.Repository
             }
             else
             {
-                var valueFilter =".*" + pagination.FilterValue.Valor + ".*";
+                var valueFilter = ".*" + pagination.FilterValue.Valor + ".*";
                 var filter = Builders<TDocument>.Filter.Regex(pagination.FilterValue.Propiedad,
                     new BsonRegularExpression(valueFilter, "i"));
                 pagination.Data = await _collection.Find(filter)
-                       .Sort(sort)
-                       .Skip((pagination.Page - 1) * pagination.PageSize)
-                       .Limit(pagination.PageSize)
-                       .ToListAsync();
+                        .Sort(sort)
+                        .Skip((pagination.Page - 1) * pagination.PageSize)
+                        .Limit(pagination.PageSize)
+                        .ToListAsync();
                 totalDocuments = (await _collection.Find(filter).ToListAsync()).Count();
             }
-           //long totalDocuments = await _collection.CountDocumentsAsync(FilterDefinition<TDocument>.Empty);
-            var rounded = Math.Ceiling(totalDocuments / Convert.ToDecimal(pagination.PageSize));
 
-            var totalPages = Convert.ToInt32(rounded);
+            if (pagination.PageSize != 0 && pagination.PageSize != null)
+            {
+                var rounded = Math.Ceiling(totalDocuments / Convert.ToDecimal(pagination.PageSize));
+                var totalPages = Convert.ToInt32(rounded);
+                pagination.PageSize = totalPages;
+            }
+            else
+            {
+                // Handle the case where pagination.PageSize is zero or null
+                // For example, set a default value or handle it as appropriate.
+                // Here, we'll set a default value of 1.
+                pagination.PageSize = 1;
+            }
 
-            pagination.PageSize = totalPages;
             pagination.TotalRows = Convert.ToInt32(totalDocuments);
 
             return pagination;

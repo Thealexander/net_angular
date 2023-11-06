@@ -8,7 +8,7 @@ namespace microservicios.Core.Entities
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        public string? Id { get; set; }
 
         public DateTime CreatedDate => DateTime.Now;
     }
